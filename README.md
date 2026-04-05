@@ -1,6 +1,6 @@
 # Tech Product Hunt
 
-[Live Site URL](https://assignment-12-d1822.web.app/)
+[Live Site URL](https://product-hunt-client.vercel.app/)
 
 ## Description
 
