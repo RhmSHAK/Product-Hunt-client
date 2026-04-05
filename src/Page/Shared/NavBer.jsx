@@ -47,7 +47,7 @@ const NavBer = () => {
                      <li><Link to='/' >Home</Link></li>
                      <li><Link to='/products' >Products</Link></li>
                 
-                     <li><Link to='/singUp'>Sign Up</Link></li>
+                     {/* <li><Link to='/singUp'>Sign Up</Link></li> */}
                      
    </>
  
