@@ -20,7 +20,7 @@ const TrendingSort = () => {
 
 
     return (
-        <div>
+        <div className="mx-auto px-5">
             <SectionTitle heading={" Featured Products Section"} ></SectionTitle>
             <div className="grid md:grid-cols-2  lg:grid-cols-4 gap-5 ">
             {

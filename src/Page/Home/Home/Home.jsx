@@ -6,7 +6,7 @@ import TrendingSort from "../sort/TrendingSort";
 
 const Home = () => {
     return (
-        <div>
+        <div className="mx-auto px-4">
             <Banner></Banner>
             {/* <FeatureProducts></FeatureProducts> */}
             <TrendingSort></TrendingSort>
