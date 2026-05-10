@@ -169,8 +169,12 @@ const ProductsDetails = () => {
 
                 <div>
                   <h3 className="font-bold text-lg">
-                    {Owner_name}
+                    Owner_name
                   </h3>
+
+                  <p className="text-gray-500 text-sm">
+                    {Owner_name}
+                  </p>
 
                   <p className="text-gray-500 text-sm">
                     {Owner_email}
