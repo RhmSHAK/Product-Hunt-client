@@ -1,5 +1,3 @@
-
-
 import useFeature from "../../Hook/useFeature";
 import SectionTitle from "../../Page/SectionTitle/SectionTitle";
 import ProductsDetails from "./ProductsDetails";

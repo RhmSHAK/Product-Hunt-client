@@ -13,7 +13,7 @@ const MyProfile = () => {
 
     return (
         <div>
-        <h2 className="text-3xl text-center text-orange-400">Total Users: {user.length}</h2>
+        <h2 className="text-3xl text-center text-orange-400">Total Users: {user.length}</h2> <hr />
         <div className="overflow-x-auto">
             <table className="table table-zebra">
                 {/* head */}

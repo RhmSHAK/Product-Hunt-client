@@ -100,10 +100,10 @@ export const router = createBrowserRouter([
           path: 'manage_users',
           element: <ManageUsers></ManageUsers>
         },
-        {
-          path: 'manage_coupons',
-          element: <ManageCoupons></ManageCoupons>
-        },
+        // {
+        //   path: 'manage_coupons',
+        //   element: <ManageCoupons></ManageCoupons>
+        // },
 
         //moderator
         {

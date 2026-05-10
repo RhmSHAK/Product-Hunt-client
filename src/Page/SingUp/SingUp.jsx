@@ -1,162 +1,144 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Proviter/AuthProviders";
 import Swal from "sweetalert2";
 import UseAxiosPublic from "../../Hook/UseAxiosPublic";
 import { sendEmailVerification } from "firebase/auth";
-
-
+import { motion } from "framer-motion";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const SingUp = () => {
-    const navigate = useNavigate();
-    const axiosPublic= UseAxiosPublic()
+  const navigate = useNavigate();
+  const axiosPublic = UseAxiosPublic();
+  const { createUser, LogOut, updateUserProfile } = useContext(AuthContext);
 
-    const {createUser,LogOut,updateUserProfile} = useContext(AuthContext);
-    //const [registerError,setRegisterError] = useState(' ');
+  const [showPassword, setShowPassword] = useState(false);
 
-const handleSignUp= event =>{
-event.preventDefault();
-const from = event.target;
-const name = from.name.value;
-const email = from.email.value;
-const password = from.password.value;
-const image = from.image.value ;
+  const handleSignUp = (event) => {
+    event.preventDefault();
+    const from = event.target;
 
-console.log(name,email,password);
+    const name = from.name.value;
+    const email = from.email.value;
+    const password = from.password.value;
+    const image = from.image.value;
 
-  //password required--------------
-//   if(password.length < 6){
-//     setRegisterError('Length must be at least 6 character or longer');
-//     return;
-//  }
-//  else if(!/[A-Z]/.test(password)){
-//     setRegisterError(' Must have an Uppercase letter in the password')
-//     return;
-//  }
-//  else if(!/[a-z]/.test(password)){
-//     setRegisterError('Must have an Lowercase letter in the password')
-//     return;
-//  }
+    createUser(email, password)
+      .then((result) => {
+        updateUserProfile(name, image).then(() => {
+          const userInfo = { name, email, image };
 
+          axiosPublic.post("/user", userInfo).then((res) => {
+            if (res.data.insertedId) {
+              Swal.fire("Success", "Account Created", "success");
+              LogOut();
+              navigate("/login");
+            }
+          });
+        });
 
+        sendEmailVerification(result.user);
+      })
+      .catch((error) => console.log(error));
+  };
 
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-10">
 
-createUser(email,password)
-.then(result => {
-    console.log(result.user);
-    from.reset();
-    updateUserProfile(name,image)
-    .then(()=>{
-      //create user entry in the database
-              const userInfo = {
-                name: name,
-                email: email,
-                image: image,
-              } 
-              
-              axiosPublic.post('/user', userInfo)
-              .then(res => {
-                if(res.data.insertedId){
-                  from.reset();
-                  Swal.fire({
-                    title: 'Successful',
-                    text: 'Create Account',
-                    icon: 'success',
-                    confirmButtonText: 'Cool'
-                  });
-                  LogOut();
-                  navigate('/login');
-                }
-              })
+      <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 bg-white shadow-xl rounded-2xl overflow-hidden">
 
-      
-    })
+        {/* ---------------- LEFT IMAGE ---------------- */}
+        <motion.div
+          initial={{ opacity: 0, x: -80 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6 }}
+          className="hidden lg:flex items-center justify-center bg-gradient-to-br from-indigo-50 to-blue-100 p-10"
+        >
+          <img
+            src="/Register.jpg"
+            alt="signup"
+            className="w-full  object-contain drop-shadow-lg"
+          />
+        </motion.div>
 
-    //verify
-    sendEmailVerification(result.user)
-    .then(()=>{
-      Swal.fire({
-        title: 'Successful',
-        text: 'please check your email and verify your account',
-        icon: 'success',
-        confirmButtonText: 'Cool'
-      });
+        {/* ---------------- RIGHT FORM ---------------- */}
+        <motion.div
+          initial={{ opacity: 0, x: 80 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6 }}
+          className="flex items-center justify-center p-8 lg:p-12"
+        >
+          <div className="w-full max-w-md">
 
-    })
-})
-.catch(error =>{
-    console.log(error);
-    
-})
-   
-}
+            <h1 className="text-3xl font-bold text-gray-800 text-center mb-2">
+              Create account
+            </h1>
 
-return (
-    <div className="hero min-h-screen bg-base-200">
-    <div className="hero-content flex-col lg:flex-row">
-      {/* <div className="mr-20 w-1/2">
-        <img src={img} alt="" />
-      </div> */}
-      <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
-      <h1 className="text-3xl text-center font-bold mt-4">Sign Up</h1>
-        
-        <form className="card-body" onSubmit={handleSignUp}>
-        {/* ---------------name------------------ */}
-        <div className="form-control">
-            <label className="label">
-              <span className="label-text">Name</span>
-            </label>
-            <input type="text" name="name" placeholder="Your Name" className="input input-bordered" required />
-          </div>
+            <p className="text-center text-gray-500 mb-6 text-sm">
+              Join and explore amazing products
+            </p>
 
-        {/* --------------Email---------------- */}
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text">Email</span>
-            </label>
-            <input type="email" name="email" placeholder="Email" className="input input-bordered" required />
-          </div>
-          
-          {/* image */}
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text">Image Url</span>
-            </label>
-            <input type="text" placeholder="image url" name="image" className="input input-bordered" required />
-          </div>
-          
-          {/* ------------Password------------- */}
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text">Confirm Password</span>
-            </label>
-            <input type="password" name="password" placeholder="Password" className="input input-bordered" required />
-            <label className="label">
-              <a href="#" className="label-text-alt link link-hover">Forgot password?</a>
-            </label>
-          </div>
-  
-        {/* ------------submit button------------------ */}
-          <div className="form-control mt-6">
-            
-            <input className="btn btn-primary" type="submit" value="Sign Up" />
+            <form onSubmit={handleSignUp} className="space-y-4">
+
+              <input
+                type="text"
+                name="name"
+                placeholder="Full Name"
+                className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                required
+              />
+
+              <input
+                type="email"
+                name="email"
+                placeholder="Email Address"
+                className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                required
+              />
+
+              <input
+                type="text"
+                name="image"
+                placeholder="Profile Image URL"
+                className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                required
+              />
+
+              {/* PASSWORD */}
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="Password"
+                  className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 pr-10"
+                  required
+                />
+
+                <span
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-3.5 cursor-pointer text-gray-500"
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </span>
+              </div>
+
+              <button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-lg transition">
+                Sign Up
+              </button>
+            </form>
+
+            <p className="text-center mt-5 text-sm text-gray-600">
+              Already have an account?{" "}
+              <Link to="/login" className="text-indigo-600 font-semibold">
+                Login
+              </Link>
+            </p>
 
           </div>
-
-        </form>
-            
-            {/* error sms
-  {
-               registerError && <p className="text-red-600">{registerError}</p>
-             } */}
-
-
-        <p className='my-4 text-center'>Already have an account? <Link className='text-orange-600 font-bold' to="/login">Login</Link></p>
+        </motion.div>
       </div>
     </div>
-  </div>
-);
+  );
 };
-
 
 export default SingUp;

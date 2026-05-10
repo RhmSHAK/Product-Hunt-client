@@ -1,223 +1,164 @@
 import { useContext, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Proviter/AuthProviders";
-// import { LoadCanvasTemplate, loadCaptchaEnginge, validateCaptcha } from "react-simple-captcha";
 import Swal from "sweetalert2";
 import UseAxiosPublic from "../../Hook/UseAxiosPublic";
 import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 import { app } from "../../firebase/firebase.config";
-//import { Helmet } from "react-helmet-async";
-
+import { motion } from "framer-motion";
+import { FaGoogle } from "react-icons/fa";
 
 const LogIn = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const axiosPublic= UseAxiosPublic();
+    const axiosPublic = UseAxiosPublic();
     const emailRef = useRef(null);
-
     const auth = getAuth(app);
 
     const from = location.state?.from?.pathname || "/";
 
-    // const captchaRef = useRef(null);
+    const { logIn, googleLogIn } = useContext(AuthContext);
 
-    // const [disabled, setDisabled] = useState(true);
-
-    const {logIn,googleLogIn,GithubLogIn} = useContext(AuthContext);
-
-    // useEffect( ()=>{
-    //     loadCaptchaEnginge(6);
-    // } , [])
-
-    const handleLogin = event =>{
+    const handleLogin = (event) => {
         event.preventDefault();
         const form = event.target;
         const email = form.email.value;
         const password = form.password.value;
-        
-        console.log(email,password);
-          
-        
 
         logIn(email, password)
-            .then(result => {
-                console.log(result.user);
-                Swal.fire({
-                    title: 'Successful',
-                    text: 'LogIn Successful',
-                    icon: 'success',
-                    confirmButtonText: 'Cool'
-                })
-                navigate(from, {replace: true});
+            .then(() => {
+                Swal.fire("Success", "Login Successful", "success");
+                navigate(from, { replace: true });
             })
-            .catch(error => {
-                console.log(error);
-            })
-    }
-    
+            .catch(() => {
+                Swal.fire("Error", "Invalid email or password", "error");
+            });
+    };
 
-    // const handleValidateCaptcha = (e) =>{
-        
-
-    //      const user_captcha_value = e.target.value;
-    //      if (validateCaptcha(user_captcha_value)==true) {
-    //          setDisabled(false);
-    //     }
-   
-    //     else {
-    //         setDisabled(true);
-    //     }
-    // }
-
-    const handleGoogle = () =>{
+    const handleGoogle = () => {
         googleLogIn()
-        .then(result=>{
-          console.log(result.user);
-          const userInfo = {
-            email: result.user?.email,
-            name: result.user?.displayName,
-            image: result.user?.photoURL
-          }
+            .then(result => {
+                const userInfo = {
+                    email: result.user?.email,
+                    name: result.user?.displayName,
+                    image: result.user?.photoURL
+                };
 
-          axiosPublic.post('/user', userInfo)
-          .then(res => {
-            console.log(res.data);
-            if(res.data.insertedId){
-                Swal.fire({
-                    title: 'Successful',
-                    text: 'LogIn Successful',
-                    icon: 'success',
-                    confirmButtonText: 'Cool'
-                  })
-                  
-              }
+                axiosPublic.post("/user", userInfo);
 
-          })
-          navigate(from, {replace: true});
-
-        })
-        .catch(error =>{
-          console.log(error)
-        })
-      }
-      
-      
-      const handleGithub = () =>{
-        GithubLogIn()
-        .then(result=>{
-          console.log(result.user);
-          Swal.fire({
-              title: 'Successful',
-              text: 'LogIn Successful',
-              icon: 'success',
-              confirmButtonText: 'Cool'
+                Swal.fire("Success", "Google Login Successful", "success");
+                navigate(from, { replace: true });
             })
-            navigate(from, {replace: true});
-        })
-        .catch(error =>{
-          console.log(error)
-        })
-      
-    }
+            .catch(() => {
+                Swal.fire("Error", "Google Login Failed", "error");
+            });
+    };
 
-    //forget
-    const handleForget = e =>{
+    const handleForget = () => {
         const email = emailRef.current.value;
-        if(!email){
-        console.log('email forget', emailRef.current.value);
-        return
-        }
-        else if(!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)){
-            alert('please write a valid email');
-            return
-        }
 
-        //send validation
-        sendPasswordResetEmail(auth,email)
-        .then(()=>{
-            Swal.fire({
-                position: "top-end",
-                icon: "success",
-                title: "Please check your email",
-                showConfirmButton: false,
-                timer: 1500
-              });
-        })
-        .catch(error=>{
-            console.log(error);
-        })
-    }
+        if (!email) return Swal.fire("Error", "Enter your email first", "error");
 
-
-
-      
+        sendPasswordResetEmail(auth, email)
+            .then(() => {
+                Swal.fire("Sent", "Check your email", "success");
+            })
+            .catch(() => {
+                Swal.fire("Error", "Failed to send reset email", "error");
+            });
+    };
 
     return (
-       <>
-        
-        {/* <Helmet>
-                <title>Bistro Boss | LogIn</title>
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-blue-100 px-4">
 
-            </Helmet> */}
-       
-       <div className="hero min-h-screen bg-base-200">
-            <div className="hero-content flex-col lg:flex-row-reverse">
-                <div className="text-center md:w-1/2 lg:text-left">
-                    <h1 className="text-5xl font-bold">Login now!</h1>
-                    <p className="py-6">Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem quasi. In deleniti eaque aut repudiandae et a id nisi.</p>
-                </div>
-                <div className="card md:w-1/2  max-w-sm shadow-2xl bg-base-100">
+            <div className="w-full max-w-5xl grid md:grid-cols-2 bg-white shadow-2xl rounded-2xl overflow-hidden">
 
-                    <form onSubmit={handleLogin} className="card-body">
-                        <div className="form-control">
-                            <label className="label">
-                                <span className="label-text">Email</span>
-                            </label>
-                            <input type="email" name="email" ref={emailRef} placeholder="email" className="input input-bordered" required />
+                {/* LEFT IMAGE SIDE */}
+                <motion.div
+                    initial={{ opacity: 0, x: -80 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.6 }}
+                    className="hidden md:flex items-center justify-center bg-gradient-to-br from-indigo-500 to-blue-500 p-10"
+                >
+                    <img
+                        src="/Login-01.jpg"
+                        alt="login"
+                        className="w-full max-w-sm drop-shadow-2xl"
+                    />
+                </motion.div>
+
+                {/* RIGHT FORM SIDE */}
+                <motion.div
+                    initial={{ opacity: 0, x: 80 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.6 }}
+                    className="p-8 md:p-12"
+                >
+                    <h2 className="text-3xl font-bold text-gray-800 mb-2">
+                        Welcome Back 👋
+                    </h2>
+                    <p className="text-gray-500 mb-6">
+                        Login to continue your journey
+                    </p>
+
+                    <form onSubmit={handleLogin} className="space-y-4">
+
+                        <input
+                            type="email"
+                            name="email"
+                            ref={emailRef}
+                            placeholder="Email"
+                            className="w-full input input-bordered"
+                            required
+                        />
+
+                        <input
+                            type="password"
+                            name="password"
+                            placeholder="Password"
+                            className="w-full input input-bordered"
+                            required
+                        />
+
+                        <div className="flex justify-between text-sm">
+                            <button
+                                type="button"
+                                onClick={handleForget}
+                                className="text-blue-500 hover:underline"
+                            >
+                                Forgot password?
+                            </button>
                         </div>
 
-                        <div className="form-control">
-                            <label className="label">
-                                <span className="label-text">Password</span>
-                            </label>
-                            <input type="password" name="password" placeholder="password" className="input input-bordered" required />
-                            <label className="label">
-                                <a href="#" onClick={handleForget} className="label-text-alt link link-hover">Forgot password?</a>
-                            </label>
-                        </div>
-
-                        {/* <div className="form-control">
-                            <label className="label">
-                            <LoadCanvasTemplate />
-                            </label>
-                            <input type="text" onBlur={handleValidateCaptcha} name="captcha" placeholder="type the captcha above" className="input input-bordered" required />
-                            {/* <button  className="btn btn-outline btn-xs mt-2">Validate</button> */}
-                        {/* </div>  */}
-
-                        <div className="form-control mt-6">
-                           
-                            <input  type="submit" className="btn btn-primary" value="LogIN" />
-                        </div>
+                        <button
+                            type="submit"
+                            className="btn btn-primary w-full"
+                        >
+                            Login
+                        </button>
                     </form>
 
-                    <p className='my-4 text-center'>New user <Link className='text-orange-600 font-bold' to="/singUp">Sign Up</Link></p>
+                    {/* divider */}
+                    <div className="divider">OR</div>
 
-                    <div className="flex justify-around">
-                        <p>
-                            <button onClick={handleGoogle} className="mx-6 mb-4 btn btn-ghost">Google</button>
-                        </p>
-                        {/* <p>
-                            <button onClick={handleGithub} className="mx-6 mb-4 btn btn-ghost">GitHub</button>
-                        </p> */}
-                    </div>
+                    {/* Google Login */}
+                    <button
+                        onClick={handleGoogle}
+                        className="btn btn-outline w-full flex items-center gap-2"
+                    >
+                        <FaGoogle /> Continue with Google
+                    </button>
 
-                </div>
+                    <p className="text-center mt-6 text-sm">
+                        New here?{" "}
+                        <Link to="/singUp" className="text-blue-600 font-semibold">
+                            Create account
+                        </Link>
+                    </p>
+                </motion.div>
             </div>
         </div>
-       
-       </>
     );
 };
-
 
 export default LogIn;

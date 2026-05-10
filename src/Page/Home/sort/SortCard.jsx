@@ -1,73 +1,49 @@
-import { useContext } from "react";
-import { FaThumbsUp } from "react-icons/fa";
-import Swal from "sweetalert2";
-import { AuthContext } from "../../../Proviter/AuthProviders";
-import UseAxiosPublic from "../../../Hook/UseAxiosPublic";
+import { FaBox, FaTag, FaUserCircle } from "react-icons/fa";
 
+const SortCard = ({ items }) => {
+  const { name, image, tag, Owner_name, description } = items;
 
-const SortCard = ({items}) => {
-    const {name,image,Vote,_id,email,tag} = items;
-    const{user} = useContext(AuthContext);
-     const axiosPublic = UseAxiosPublic();
+  return (
+    <div className="group relative w-full max-w-sm overflow-hidden rounded-3xl bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 p-[2px] shadow-xl transition hover:scale-105">
 
+      <div className="relative h-full rounded-3xl bg-white">
 
+        {/* Image */}
+        <figure className="overflow-hidden rounded-t-3xl">
+          <img
+            src={image}
+            alt={name}
+            className="h-60 w-full object-cover transition duration-500 group-hover:scale-110"
+          />
+        </figure>
 
-    const handleVote2 = item =>{
-        const VoteCount = {
-            email: user.email
-        }
-        if(email !== user.email){
-         axiosPublic.patch(`/featured/voteSort/${item._id}`,VoteCount)
-         .then(res => {
-             console.log(res.data);
-           
-             
-             if(res.data.modifiedCount > 0){
-                 
-                 Swal.fire({
-                     position: "top-end",
-                     icon: "success",
-                     title: `${name} is an Vote Now!`,
-                     showConfirmButton: false,
-                     timer: 1800
-                   });
-             }
-            //  window.location.reload();
- 
-           //}
-         })
-        }
-       }
- 
+        {/* Content */}
+        <div className="p-5 space-y-3">
 
+          <div className="flex items-center gap-2">
+            <FaBox className="text-blue-600" />
+            <h2 className="text-xl font-bold text-gray-800">{name}</h2>
+          </div>
 
+          <div className="flex items-center gap-2">
+            <FaTag className="text-purple-600" />
+            <span className="bg-purple-100 text-purple-700 text-xs font-semibold px-3 py-1 rounded-full">
+              {tag}
+            </span>
+          </div>
 
+          <p className="text-sm text-gray-600">{description}</p>
 
-    return (
-       <div>
-            <div className="card w-96 h-96 bg-base-100 shadow-xl">
-                <figure className="px-10 pt-10">
-                    <img src={image} alt="" className="rounded-xl" />
-                </figure>
-                <div className="card-body items-center text-center">
-                    <h2 className="card-title"> {name}</h2>
-                    <p>Tags: {tag}</p>
+          <div className="flex items-center gap-2 text-gray-700">
+            <FaUserCircle className="text-blue-500" />
+            <span className="font-semibold">Owner:</span>
+            <span>{Owner_name}</span>
+          </div>
 
-                </div>
-                <div className="card-actions flex justify-around mb-3 ">
-                    <button
-                        onClick={()=>handleVote2(items)}  
-                        className="btn btn-primary">UpVoteButton</button>
-                    <div className="flex gap-3">
-                        <FaThumbsUp className="text-3xl mt-1"></FaThumbsUp>
-                        <p className="mt-2 text-[22px]">{Vote}</p>
-                    </div>
-                </div>
-            </div>
-           
-       </div>
-    
-    );
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default SortCard;

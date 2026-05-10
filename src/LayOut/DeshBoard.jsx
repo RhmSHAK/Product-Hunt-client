@@ -34,12 +34,12 @@ const DeshBoard = () => {
                        </NavLink> 
                    </li>
 
-                <li> 
+                {/* <li> 
                    <NavLink to="/dashboard/manage_coupons">
                        
                        Manage Coupons
                        </NavLink> 
-                   </li>
+                   </li> */}
                 
                    
                  </>
