@@ -65,7 +65,7 @@ const NavBer = () => {
   );
 
   return (
-    <div className="navbar sticky top-0 z-50 px-4 lg:px-10 py-4 bg-white/90 backdrop-blur-lg shadow-lg border-b border-gray-200">
+    <div className="navbar sticky top-0 z-50 px-4 lg:px-10 py-4 bg-gradient-to-r from-orange-50 via-white to-orange-100 backdrop-blur-lg shadow-lg border-b border-gray-200">
 
       {/* LEFT */}
       <div className="navbar-start">

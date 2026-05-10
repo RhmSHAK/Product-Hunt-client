@@ -6,12 +6,21 @@
 
 Tech Product Hunt is a platform where users can discover, share, and review the latest tech products including web apps, AI tools, software, games, and mobile apps. Users can submit new products, upvote or downvote existing products, and post reviews.
 
+## Admin & Moderators (email & password)
+**Admin**
+email: foki@gmail.com
+pass: 123456
+
+**Moderators**
+email: mehedi@gmail.com
+pass: 123456
+
 ## Key Features
 
 1. **User Roles & Permissions**
-   - Normal Users: Browse, upvote, submit, and review products.
+   - Normal Users: Browse, submit, and review products.
    - Moderators: Review and approve/reject products, handle reported products, mark products as featured.
-   - Admins: Manage user roles, monitor site activities.
+   - Admins: Manage user roles, monitor site activities,dynamic data use(Chart.js,Recharts) .
 
 2. **Product Management**
    - Add new products with details such as name, image, description, tags, and external links.

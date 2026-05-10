@@ -4,9 +4,9 @@ const HomeSections = () => {
   return (
     <div>
 
-      {/* ================= Why Choose Us ================= */}
+  
 
-      <section className="py-20 bg-base-200">
+      <section className="py-20 bg-gradient-to-r from-orange-50 via-white to-orange-100">
         <div className="max-w-7xl mx-auto px-4">
 
           <div className="text-center mb-14">
@@ -71,7 +71,7 @@ const HomeSections = () => {
       </section>
 
 
-      {/* ================= Community Stats ================= */}
+      
 
       <section className="py-20 bg-base-100">
         <div className="max-w-7xl mx-auto px-4">
