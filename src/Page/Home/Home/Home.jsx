@@ -1,4 +1,5 @@
 import Banner from "../Banner/Banner";
+import HomeSections from "../extra_section/HomeSections";
 import FeatureProducts from "../FeatureProducts/FeatureProducts";
 import TrendingSort from "../sort/TrendingSort";
 
@@ -10,6 +11,7 @@ const Home = () => {
             <Banner></Banner>
             {/* <FeatureProducts></FeatureProducts> */}
             <TrendingSort></TrendingSort>
+            <HomeSections></HomeSections>
             
         </div>
     );
