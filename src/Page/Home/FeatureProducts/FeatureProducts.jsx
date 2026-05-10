@@ -10,7 +10,7 @@ const FeatureProducts = () => {
    const [feature] = useAccepet();
 
     return (
-        <div>
+        <div className="mx-auto px-4">
            <SectionTitle heading={"Featured Products Section"} ></SectionTitle>
             <div className="grid md:grid-cols-2  lg:grid-cols-4 gap-5 ">
             {
